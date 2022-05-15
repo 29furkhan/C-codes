@@ -1,51 +1,56 @@
 ﻿using System;
 using System.IO;
 
-namespace TSLP
+namespace workspaces
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string path = "/Users/furkhan/Documents/index.txt";
-            FileInfo file = new FileInfo(path);
-
-            if (!file.Exists)
-                file.Create();
-            else
+            var path = "/Users/furkhan/Documents/index.txt";
+            
+            if(! File.Exists(path))
             {
-                using (StreamWriter sw = file.CreateText())
+                File.Create(path);
+            }
+            else{
+                // Write data
+                string data = "Shang chi";
+                File.WriteAllText(path, data);
+
+                using(StreamWriter sw = File.CreateText(path)) 
                 {
-                    sw.WriteLine("Iron man");
-                    sw.WriteLine("Hulk");
-                    sw.WriteLine("Thor");
-                    sw.WriteLine("Captain america");
+                    sw.WriteLine("Wanda vision");
+                    sw.WriteLine("Falcon and WS");
+                    sw.WriteLine("Loki");
+                    sw.WriteLine("Moon knight");
+                }
+                string[] dt = {"Shang chi", "Eternals"};
+                File.WriteAllLines(path, dt);
+
+                // Append data
+                data = "What if..?\n";
+                File.AppendAllText(path, data);
+                dt = new string[]{"Loki 2", "Dr Strange 2"};
+                File.AppendAllLines(path, dt);
+
+                using(StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine("Ms. Marvel");
                 }
 
-                using (StreamReader sr = file.OpenText())
+                // Read the data
+                foreach(var line in File.ReadLines(path))
                 {
-                    string s = "";
-                    while((s = sr.ReadLine()) != null)
-                    {
-                        Console.WriteLine(s);
-                    }
+                    Console.WriteLine(line);
                 }
+                Console.WriteLine(new string('-',50));
 
-                Console.WriteLine(file.Length);
-                Console.WriteLine(file.Name);
-                Console.WriteLine(file.DirectoryName);
-
-                file.Delete();
+                foreach(var line in File.ReadAllLines(path))
+                {
+                    Console.WriteLine(line);
+                }
             }
         }
     }
 }
-
-/*
-Hulk
-Thor
-Captain america
-0
-index.txt
-/Users/furkhan/Documents
-*/
